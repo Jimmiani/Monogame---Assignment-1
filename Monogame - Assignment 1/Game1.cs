@@ -13,9 +13,9 @@ namespace Monogame___Assignment_1
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
-        Texture2D sunsetTexture, birdTexture, boatTexture;
+        Texture2D sunsetTexture, birdTexture, boatTexture, starTexture, dolphinTexture;
 
-        List<Vector2> birds;    
+        List<Vector2> birds;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -31,6 +31,7 @@ namespace Monogame___Assignment_1
             {
                 birds.Add(new Vector2(generator.Next(20, 600), generator.Next(10, 200)));
             }
+            
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
@@ -46,15 +47,14 @@ namespace Monogame___Assignment_1
             sunsetTexture = Content.Load<Texture2D>("sunset");
             birdTexture = Content.Load<Texture2D>("birdSilhouette");
             boatTexture = Content.Load<Texture2D>("boat");
+            starTexture = Content.Load<Texture2D>("star");
+            dolphinTexture = Content.Load<Texture2D>("dolphin");
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            
-
             base.Update(gameTime);
         }
 
@@ -63,6 +63,23 @@ namespace Monogame___Assignment_1
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(sunsetTexture, new Vector2(0, 0), Color.White);
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 14; j++)
+                {
+                    _spriteBatch.Draw(starTexture, new Vector2((60 * j), (40 * i)), Color.White);
+                }
+            }
+            for (int i = 0; i < 2; i++)
+            {
+                for (int j = 0; j < 2; j++)
+                {
+                    if (i != j)
+                    {
+                        _spriteBatch.Draw(dolphinTexture, new Vector2((350 + (100 * i)), (375 + (50 * j))), Color.White);
+                    }
+                }
+            }
             for (int i = 0; i < birds.Count - 1; i++)
             {
                 _spriteBatch.Draw(birdTexture, birds[i], Color.White);
