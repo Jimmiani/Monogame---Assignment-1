@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 
@@ -13,6 +14,8 @@ namespace Monogame___Assignment_1
         private SpriteBatch _spriteBatch;
 
         Texture2D sunsetTexture, birdTexture, boatTexture;
+
+        List<Vector2> birds;    
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -22,6 +25,12 @@ namespace Monogame___Assignment_1
 
         protected override void Initialize()
         {
+            Random generator = new Random();
+            birds = new List<Vector2>();
+            for (int i = 0; i < 10; i++)
+            {
+                birds.Add(new Vector2(generator.Next(20, 600), generator.Next(10, 200)));
+            }
             _graphics.PreferredBackBufferWidth = 800;
             _graphics.PreferredBackBufferHeight = 500;
             _graphics.ApplyChanges();
@@ -34,6 +43,9 @@ namespace Monogame___Assignment_1
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+            sunsetTexture = Content.Load<Texture2D>("sunset");
+            birdTexture = Content.Load<Texture2D>("birdSilhouette");
+            boatTexture = Content.Load<Texture2D>("boat");
         }
 
         protected override void Update(GameTime gameTime)
@@ -41,24 +53,21 @@ namespace Monogame___Assignment_1
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            sunsetTexture = Content.Load<Texture2D>("sunset");
-            birdTexture = Content.Load<Texture2D>("birdSilhouette");
-            boatTexture = Content.Load<Texture2D>("canoeSilhouette");
+            
 
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            Random generator = new Random();
             _spriteBatch.Begin();
 
             _spriteBatch.Draw(sunsetTexture, new Vector2(0, 0), Color.White);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < birds.Count - 1; i++)
             {
-                _spriteBatch.Draw(birdTexture, new Vector2(generator.Next(20, 730), generator.Next(10, 200)), Color.White);
+                _spriteBatch.Draw(birdTexture, birds[i], Color.White);
             }
-            _spriteBatch.Draw(boatTexture, new Vector2(250, 375), Color.White);
+            _spriteBatch.Draw(boatTexture, new Vector2(200, 300), Color.White);
             _spriteBatch.End();
 
             base.Draw(gameTime);
